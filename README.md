@@ -1,10 +1,10 @@
-# ORVANTA AI
+# ORVANTA AI(SHARVAGYA.AI)
 
 Operational Risk Visibility, Analysis, Notification, Triage, and Automation.
 
 ORVANTA AI is a full-stack geopolitical risk intelligence platform for teams that need live monitoring, alerting, analytics, and operational response workflows in one place.
 
-## Why ORVANTA AI
+## Why ORVANTA AI(SHARVAGYA.AI)
 
 - Live risk monitoring from multiple feeds
 - Clean dashboard for non-technical and technical users
