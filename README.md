@@ -63,7 +63,6 @@ flowchart LR
 
     B --> P[(PostgreSQL)]
     B --> R[(Redis)]
-    B --> C[(ChromaDB)]
     B --> O[Ollama / External AI Providers]
 
     B --> W[Celery Worker]
@@ -75,7 +74,7 @@ flowchart LR
 - Frontend: Next.js 14, React, TypeScript, Framer Motion, Recharts
 - Backend: FastAPI, SQLAlchemy Async, Pydantic
 - Queue and jobs: Celery, Redis
-- Data stores: PostgreSQL, ChromaDB
+- Data stores: PostgreSQL
 - Infra: Docker Compose, Nginx
 - Auth options: App JWT, Google Sign-In, Supabase bridge
 
