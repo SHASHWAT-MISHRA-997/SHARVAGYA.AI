@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { BackendConfigNotice } from '@/components/BackendConfigNotice';
 
 export const metadata: Metadata = {
   title: 'ORVANTA - Operational Risk Platform',
@@ -12,6 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body>
         <ThemeProvider>{children}</ThemeProvider>
+        <BackendConfigNotice />
       </body>
     </html>
   );

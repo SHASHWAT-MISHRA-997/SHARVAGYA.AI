@@ -4,48 +4,67 @@ Common dependencies for route handlers: auth, DB session, org context.
 """
 
 from fastapi import Depends, HTTPException, status, Header
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+import secrets
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from typing import Optional
 from uuid import UUID
 
 from app.db.database import get_db
-from app.core.security import decode_access_token
+from app.core.security import hash_password
 from app.models.user import User
-from app.models.organization import Organization, OrgMember
+from app.models.organization import Organization, OrgMember, OrgRole
 
-security_scheme = HTTPBearer()
+# Login has been removed from the product. Every request runs as a single
+# shared workspace user, created automatically the first time it is needed.
+DEFAULT_USER_EMAIL = "workspace@orvanta.ai"
+DEFAULT_USERNAME = "workspace"
+DEFAULT_ORG_SLUG = "orvanta-workspace"
+DEFAULT_ORG_NAME = "ORVANTA"
 
 
-async def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security_scheme),
-    db: AsyncSession = Depends(get_db),
-) -> User:
-    """Extract and validate the current user from JWT token."""
-    payload = decode_access_token(credentials.credentials)
-    user_id = payload.get("sub")
-    if not user_id:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid token payload",
-        )
-
-    result = await db.execute(select(User).where(User.id == UUID(user_id)))
+async def _get_or_create_default_user(db: AsyncSession) -> User:
+    result = await db.execute(select(User).where(User.email == DEFAULT_USER_EMAIL))
     user = result.scalar_one_or_none()
-
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User not found",
+    if user is None:
+        user = User(
+            email=DEFAULT_USER_EMAIL,
+            username=DEFAULT_USERNAME,
+            hashed_password=hash_password(secrets.token_urlsafe(32)),
+            full_name="Workspace",
+            is_active=True,
         )
-    if not user.is_active:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="User account is disabled",
-        )
+        db.add(user)
+        await db.flush()
 
+    membership = (
+        await db.execute(select(OrgMember).where(OrgMember.user_id == user.id).limit(1))
+    ).scalar_one_or_none()
+    if membership is None:
+        org = (
+            await db.execute(select(Organization).where(Organization.slug == DEFAULT_ORG_SLUG))
+        ).scalar_one_or_none()
+        if org is None:
+            org = Organization(name=DEFAULT_ORG_NAME, slug=DEFAULT_ORG_SLUG)
+            db.add(org)
+            await db.flush()
+        db.add(OrgMember(user_id=user.id, organization_id=org.id, role=OrgRole.ADMIN))
+        await db.flush()
+
+    await db.commit()
     return user
+
+
+async def get_current_user(db: AsyncSession = Depends(get_db)) -> User:
+    """Return the shared workspace user (no login required)."""
+    try:
+        return await _get_or_create_default_user(db)
+    except IntegrityError:
+        # Another request created it concurrently — read it back.
+        await db.rollback()
+        return await _get_or_create_default_user(db)
 
 
 async def get_current_org(

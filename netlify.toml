@@ -1,0 +1,10 @@
+# The Next.js app lives in /frontend — build from there so Netlify detects
+# the framework and serves the app instead of an empty repo root.
+[build]
+  base = "frontend"
+  command = "npm install --no-audit --no-fund && npm run build"
+  publish = ".next"
+
+# Netlify's Next.js runtime turns the .next output into pages + server functions.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
