@@ -11,7 +11,7 @@ export default function Home() {
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14 }}>
           <Globe size={42} style={{ color: 'var(--accent-indigo)' }} />
         </div>
-        <h1 className="brand-wordmark brand-wordmark-auth">ORVANTA</h1>
+        <h1 className="brand-wordmark brand-wordmark-auth">SHARVAGYA.AI</h1>
         <p>Opening your workspace...</p>
         <div
           style={{
@@ -30,6 +30,9 @@ export default function Home() {
             Open Dashboard
           </Link>
         </div>
+        <p style={{ marginTop: 20, fontSize: 12, color: 'var(--text-muted)' }}>
+          <Link href="/privacy">Privacy</Link>{' · '}<Link href="/support">Support</Link>
+        </p>
       </div>
     </div>
   );

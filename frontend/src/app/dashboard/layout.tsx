@@ -37,12 +37,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     if (userData) {
       try {
         const user = JSON.parse(userData);
-        setOrgName(user.organization?.name || 'ORVANTA');
+        setOrgName(user.organization?.name || 'SHARVAGYA.AI');
       } catch {
-        setOrgName('ORVANTA');
+        setOrgName('SHARVAGYA.AI');
       }
     } else {
-      setOrgName('ORVANTA');
+      setOrgName('SHARVAGYA.AI');
     }
   }, [router]);
 
@@ -104,7 +104,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <aside className="sidebar">
         <div className="sidebar-logo">
           <Globe size={28} style={{ color: '#6366f1' }} />
-          <h1 className="brand-wordmark">ORVANTA</h1>
+          <h1 className="brand-wordmark">SHARVAGYA.AI</h1>
         </div>
         {renderNav()}
       </aside>
@@ -113,7 +113,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="mobile-header-brand">
           <Globe size={24} style={{ color: '#6366f1' }} />
           <div>
-            <strong className="brand-wordmark">ORVANTA</strong>
+            <strong className="brand-wordmark">SHARVAGYA.AI</strong>
             <span>{orgName}</span>
           </div>
         </div>
@@ -149,7 +149,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <div className="mobile-nav-header">
                 <div className="sidebar-logo" style={{ marginBottom: 0, padding: 0 }}>
                   <Globe size={24} style={{ color: '#6366f1' }} />
-                  <h1 className="brand-wordmark" style={{ fontSize: 18 }}>ORVANTA</h1>
+                  <h1 className="brand-wordmark" style={{ fontSize: 18 }}>SHARVAGYA.AI</h1>
                 </div>
                 <button
                   className="mobile-menu-button"

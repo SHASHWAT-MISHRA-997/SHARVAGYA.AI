@@ -3,8 +3,8 @@ import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 
 export const metadata: Metadata = {
-  title: 'ORVANTA - Operational Risk Platform',
-  description: 'Operations SaaS for verified event intelligence, analytics, risk scoring, alerts, and operator workflows.',
+  title: 'SHARVAGYA.AI - Operational Intelligence & Risk Analytics',
+  description: 'A workspace for verified event intelligence, risk scoring, alerts, analytics, and operator workflows.',
   manifest: '/manifest.json',
 };
 

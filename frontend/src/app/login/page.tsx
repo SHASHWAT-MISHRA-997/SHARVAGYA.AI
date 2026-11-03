@@ -97,7 +97,7 @@ export default function LoginPage() {
         <div style={{ textAlign: 'center', marginBottom: 8 }}>
           <Globe size={40} style={{ color: '#6366f1' }} />
         </div>
-        <h1 className="brand-wordmark brand-wordmark-auth">ORVANTA</h1>
+        <h1 className="brand-wordmark brand-wordmark-auth">SHARVAGYA.AI</h1>
         <p>Sign in to your operations workspace</p>
 
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
@@ -154,6 +154,10 @@ export default function LoginPage() {
         <p style={{ marginTop: 24, fontSize: 13, textAlign: 'center', color: 'var(--text-muted)' }}>
           Don&apos;t have an account?{' '}
           <Link href="/register" style={{ color: 'var(--accent-indigo)' }}>Create one</Link>
+        </p>
+        <p style={{ marginTop: 12, fontSize: 12, textAlign: 'center', color: 'var(--text-muted)' }}>
+          <Link href="/privacy" style={{ color: 'var(--accent-indigo)' }}>Privacy</Link>{' · '}
+          <Link href="/support" style={{ color: 'var(--accent-indigo)' }}>Support</Link>
         </p>
       </motion.div>
     </div>
