@@ -1,60 +1,20 @@
 'use client';
 
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { Suspense, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { KeyRound } from 'lucide-react';
 import { authAPI } from '@/lib/api';
-import { getSupabaseClient, isSupabaseConfigured } from '@/lib/supabase';
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams();
   const token = useMemo(() => searchParams.get('token') || '', [searchParams]);
-  const recoveryCode = useMemo(() => searchParams.get('code') || '', [searchParams]);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [sessionReady, setSessionReady] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const prepareSupabaseRecoverySession = async () => {
-      if (!isSupabaseConfigured()) {
-        setSessionReady(true);
-        return;
-      }
-
-      try {
-        const supabase = getSupabaseClient();
-        if (recoveryCode) {
-          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(recoveryCode);
-          if (exchangeError && !cancelled) {
-            setError(exchangeError.message || 'Invalid or expired recovery link.');
-            setSessionReady(true);
-            return;
-          }
-        }
-
-        if (!cancelled) {
-          setSessionReady(true);
-        }
-      } catch {
-        if (!cancelled) {
-          setSessionReady(true);
-        }
-      }
-    };
-
-    prepareSupabaseRecoverySession();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [recoveryCode]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,35 +32,12 @@ function ResetPasswordForm() {
 
     setLoading(true);
     try {
-      if (token) {
-        const res = await authAPI.resetPassword({ token, new_password: password });
-        setMessage(res.data?.message || 'Password reset successful.');
-      } else {
-        if (!isSupabaseConfigured()) {
-          setError('Reset link is invalid for current setup.');
-          return;
-        }
-
-        const supabase = getSupabaseClient();
-        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-        if (sessionError) {
-          setError(sessionError.message || 'Unable to validate reset session.');
-          return;
-        }
-
-        if (!sessionData.session) {
-          setError('Reset session expired. Please request a new reset link.');
-          return;
-        }
-
-        const { error: updateError } = await supabase.auth.updateUser({ password });
-        if (updateError) {
-          setError(updateError.message || 'Unable to reset password');
-          return;
-        }
-
-        setMessage('Password reset successful. You can now log in.');
+      if (!token) {
+        setError('Reset link is missing or invalid. Please request a new one.');
+        return;
       }
+      const res = await authAPI.resetPassword({ token, new_password: password });
+      setMessage(res.data?.message || 'Password reset successful. You can now log in.');
 
       setPassword('');
       setConfirmPassword('');
@@ -155,7 +92,7 @@ function ResetPasswordForm() {
             type="submit"
             className="btn btn-primary btn-lg"
             style={{ width: '100%', marginTop: 16 }}
-            disabled={loading || (!token && !sessionReady)}
+            disabled={loading || !token}
           >
             {loading ? 'Updating...' : <><KeyRound size={18} /> Update Password</>}
           </button>

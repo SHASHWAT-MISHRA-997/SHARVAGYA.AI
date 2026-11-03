@@ -6,7 +6,6 @@ import { authAPI } from '@/lib/api';
 import { motion } from 'framer-motion';
 import { Globe, LogIn } from 'lucide-react';
 import GoogleSignInButton from '@/components/GoogleSignInButton';
-import { getSupabaseClient, isSupabaseConfigured } from '@/lib/supabase';
 import { demoUser, isDemoMode } from '@/lib/demo-api';
 
 export default function LoginPage() {
@@ -44,30 +43,7 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
     try {
-      if (!isSupabaseConfigured()) {
-        setError('Supabase auth is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.');
-        return;
-      }
-
-      const supabase = getSupabaseClient();
-      const emailValue = email.trim().toLowerCase();
-      const { data: supabaseData, error: supabaseError } = await supabase.auth.signInWithPassword({
-        email: emailValue,
-        password,
-      });
-
-      if (supabaseError) {
-        setError(supabaseError.message || 'Login failed');
-        return;
-      }
-
-      const accessToken = supabaseData.session?.access_token;
-      if (!accessToken) {
-        setError('Supabase session not found. Please try again.');
-        return;
-      }
-
-      const res = await authAPI.loginWithSupabase({ access_token: accessToken });
+      const res = await authAPI.login({ email: email.trim().toLowerCase(), password });
       localStorage.setItem('warops_token', res.data.access_token);
       localStorage.setItem('warops_user', JSON.stringify(res.data));
       window.location.href = '/dashboard';

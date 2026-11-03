@@ -6,7 +6,6 @@ import { authAPI } from '@/lib/api';
 import { motion } from 'framer-motion';
 import { Globe, UserPlus } from 'lucide-react';
 import GoogleSignInButton from '@/components/GoogleSignInButton';
-import { getSupabaseClient, isSupabaseConfigured } from '@/lib/supabase';
 
 export default function RegisterPage() {
   const [form, setForm] = useState({ email: '', username: '', password: '', full_name: '', org_name: '' });
@@ -33,11 +32,6 @@ export default function RegisterPage() {
     setMessage('');
     setLoading(true);
     try {
-      if (!isSupabaseConfigured()) {
-        setError('Supabase auth is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.');
-        return;
-      }
-
       const payload = {
         ...form,
         email: form.email.trim().toLowerCase(),
@@ -46,33 +40,9 @@ export default function RegisterPage() {
         org_name: form.org_name.trim(),
       };
 
-      const supabase = getSupabaseClient();
-      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-        email: payload.email,
-        password: payload.password,
-        options: {
-          data: {
-            full_name: payload.full_name || undefined,
-          },
-        },
-      });
-
-      if (signUpError) {
-        setError(signUpError.message || 'Registration failed');
-        return;
-      }
-
-      const accessToken = signUpData.session?.access_token;
-      if (!accessToken) {
-        setMessage('Verification email sent. Please verify your email, then sign in.');
-        return;
-      }
-
-      const res = await authAPI.loginWithSupabase({
-        access_token: accessToken,
-        username: payload.username,
+      const res = await authAPI.register({
+        ...payload,
         full_name: payload.full_name || undefined,
-        org_name: payload.org_name,
       });
 
       localStorage.setItem('warops_token', res.data.access_token);

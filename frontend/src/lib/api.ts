@@ -81,12 +81,6 @@ export const authAPI = {
   login: (data: any) => api.post('/auth/login', data),
   loginWithGoogle: (data: { credential: string }) => api.post('/auth/google', data),
   loginWithClerk: (data: { clerk_token: string; email?: string; full_name?: string }) => api.post('/auth/clerk', data),
-  loginWithSupabase: (data: {
-    access_token: string;
-    username?: string;
-    full_name?: string;
-    org_name?: string;
-  }) => api.post('/auth/supabase', data),
   forgotPassword: (data: { email: string }) => api.post('/auth/forgot-password', data),
   resetPassword: (data: { token: string; new_password: string }) => api.post('/auth/reset-password', data),
   me: () => api.get('/auth/me'),

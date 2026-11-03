@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Mail } from 'lucide-react';
-import { getSupabaseClient, isSupabaseConfigured } from '@/lib/supabase';
+import { authAPI } from '@/lib/api';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -23,22 +23,10 @@ export default function ForgotPasswordPage() {
     setLoading(true);
     try {
       const normalizedEmail = email.trim().toLowerCase();
-      if (!isSupabaseConfigured()) {
-        setError('Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.');
-        return;
-      }
-
-      const supabase = getSupabaseClient();
-      const redirectTo = `${window.location.origin}/reset-password`;
-      const { error: supabaseError } = await supabase.auth.resetPasswordForEmail(normalizedEmail, {
-        redirectTo,
-      });
-      if (supabaseError) {
-        setError(supabaseError.message || 'Unable to send reset email');
-        return;
-      }
-
-      setMessage('If that email exists, password reset instructions have been sent.');
+      const res = await authAPI.forgotPassword({ email: normalizedEmail });
+      setMessage(res.data?.message || 'If that email exists, password reset instructions have been sent.');
+      if (res.data?.reset_link) setResetLink(res.data.reset_link);
+      if (res.data?.inbox_url) setInboxUrl(res.data.inbox_url);
     } catch (err: any) {
       if (err.code === 'ECONNABORTED') {
         setError('Request timed out. Please try again.');
