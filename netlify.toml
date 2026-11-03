@@ -4,3 +4,7 @@
   base = "frontend"
   command = "npm install --no-audit --no-fund && npm run build"
   publish = ".next"
+
+# Netlify's Next.js runtime turns the .next output into pages + server functions.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
