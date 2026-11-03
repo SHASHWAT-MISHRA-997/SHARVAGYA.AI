@@ -252,7 +252,7 @@ async def generate_executive_pdf_report(
             
         c = canvas.Canvas(buffer)
         c.setFont("Helvetica-Bold", 16)
-        c.drawString(50, 800, f"ORVANTA - Executive Geopolitical Briefing")
+        c.drawString(50, 800, f"SHARVAGYA.AI - Executive Geopolitical Briefing")
         
         c.setFont("Helvetica", 12)
         c.drawString(50, 770, f"Organization: {org.name}")

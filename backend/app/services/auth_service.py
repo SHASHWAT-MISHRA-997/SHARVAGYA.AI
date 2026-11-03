@@ -74,7 +74,7 @@ async def _create_default_org_for_user(
 ) -> Organization:
     """Create a default admin org for users missing organization membership."""
     name_seed = _normalize_optional_text(org_name) or user.full_name or user.username or user.email
-    org_name_value = f"{name_seed}'s ORVANTA Workspace"
+    org_name_value = f"{name_seed}'s SHARVAGYA.AI Workspace"
     slug = _slugify(org_name_value)
     existing_org = await db.execute(select(Organization).where(Organization.slug == slug))
     if existing_org.scalar_one_or_none():
@@ -484,7 +484,7 @@ async def google_sign_in(data: GoogleSignInRequest, db: AsyncSession) -> TokenRe
         full_name = google_payload.get("name")
         username_seed = email.split("@")[0]
         username = re.sub(r"[^a-zA-Z0-9._-]", "-", username_seed).strip("-") or "user"
-        org_name = f"{full_name or username_seed}'s ORVANTA Workspace"
+        org_name = f"{full_name or username_seed}'s SHARVAGYA.AI Workspace"
 
         existing_username = await db.execute(
             select(User).where(func.lower(User.username) == username.lower())
@@ -574,7 +574,7 @@ async def clerk_sign_in(data: ClerkSignInRequest, db: AsyncSession) -> TokenResp
             username = f"{username}-{uuid.uuid4().hex[:6]}"
 
         org_name_seed = (full_name or username_seed or "Client").strip()
-        org_name = f"{org_name_seed}'s ORVANTA Workspace"
+        org_name = f"{org_name_seed}'s SHARVAGYA.AI Workspace"
 
         user = User(
             email=email,
@@ -713,7 +713,7 @@ async def _send_password_reset_email(to_email: str, reset_link: str) -> tuple[bo
     message = EmailMessage()
     message["From"] = settings.SMTP_FROM
     message["To"] = to_email
-    message["Subject"] = "Reset your ORVANTA password"
+    message["Subject"] = "Reset your SHARVAGYA.AI password"
     message.set_content(
         f"Use this link to reset your password:\n\n{reset_link}\n\n"
         "If you did not request this, you can ignore this email."

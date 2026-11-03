@@ -61,7 +61,7 @@ async def lifespan(app: FastAPI):
 _is_production = settings.APP_ENV == "production"
 
 app = FastAPI(
-    title="ORVANTA",
+    title="SHARVAGYA.AI",
     description="Operations SaaS for verified event intelligence, analytics, risk scoring, alerts, and live management workflows",
     version="1.0.0",
     docs_url=None if _is_production else f"{settings.API_V1_PREFIX}/docs",

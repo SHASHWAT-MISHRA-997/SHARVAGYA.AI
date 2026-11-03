@@ -34,7 +34,7 @@ export default function AboutPage() {
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">About ORVANTA</h1>
+          <h1 className="page-title">About SHARVAGYA.AI</h1>
           <p className="page-subtitle">Clear product overview and trust guidance for operations workspace usage.</p>
         </div>
       </div>
@@ -45,7 +45,7 @@ export default function AboutPage() {
           What This Software Is
         </h2>
         <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.8, maxWidth: 920 }}>
-          ORVANTA is an operations platform for organizations that need a single operational view of events,
+          SHARVAGYA.AI is an operations platform for organizations that need a single operational view of events,
           alerts, risk scores, analytics, and client-facing controls. It turns stored incoming event data into structured dashboards, calculated
           risk insights, and reviewable workflows while keeping source provenance visible. Only official-source verified records
           are surfaced in the main views, and raw technical payloads are preserved for audit instead of being replaced with invented summaries.

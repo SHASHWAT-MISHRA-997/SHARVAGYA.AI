@@ -12,7 +12,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     # App
-    APP_NAME: str = "ORVANTA"
+    APP_NAME: str = "SHARVAGYA.AI"
     APP_ENV: str = "development"
     APP_DEBUG: bool = True
     API_V1_PREFIX: str = "/api/v1"
