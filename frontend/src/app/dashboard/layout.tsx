@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   LayoutDashboard, AlertTriangle, BarChart3,
-  LogOut, Globe, Info, Menu, X,
+  Globe, Info, Menu, X,
   MapPinned, SlidersHorizontal,
 } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -23,32 +23,12 @@ const navItems = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [orgName, setOrgName] = useState('');
+  const orgName = 'ORVANTA';
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
-
-  useEffect(() => {
-    const userData = localStorage.getItem('warops_user');
-    if (userData) {
-      try {
-        const user = JSON.parse(userData);
-        setOrgName(user.organization?.name || 'ORVANTA');
-      } catch {
-        setOrgName('ORVANTA');
-      }
-    } else {
-      setOrgName('ORVANTA');
-    }
-  }, []);
 
   useEffect(() => {
     setIsMobileNavOpen(false);
   }, [pathname]);
-
-  const handleLogout = () => {
-    localStorage.removeItem('warops_token');
-    localStorage.removeItem('warops_user');
-    window.location.href = '/login';
-  };
 
   const renderNav = () => (
     <>
@@ -71,14 +51,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <ThemeToggle />
         </div>
 
-        <button
-          onClick={handleLogout}
-          className="nav-item"
-          style={{ width: '100%', border: 'none', background: 'transparent' }}
-        >
-          <LogOut size={18} />
-          Sign Out
-        </button>
         <div className="sidebar-credit">
           Made by{' '}
           <a

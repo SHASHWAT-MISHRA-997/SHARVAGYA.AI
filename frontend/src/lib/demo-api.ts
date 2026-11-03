@@ -236,7 +236,7 @@ function route(method: string, path: string, params: any, body: any): [number, a
   const m = (re: RegExp) => path.match(re);
   let match: RegExpMatchArray | null;
 
-  // Auth — every sign-in path lands in the demo workspace.
+  // Auth endpoints are no longer used by the UI (login was removed).
   if (path.startsWith('/auth/')) {
     if (path === '/auth/me') return [200, demoUser.user];
     if (path === '/auth/forgot-password' || path === '/auth/reset-password') {

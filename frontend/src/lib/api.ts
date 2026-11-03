@@ -39,53 +39,6 @@ if (isDemoMode()) {
   api.defaults.adapter = demoAdapter;
 }
 
-// JWT interceptor
-api.interceptors.request.use((config) => {
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('warops_token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-  }
-  return config;
-});
-
-api.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    const status = err.response?.status;
-    const detail = err.response?.data?.detail;
-
-    if (err.response?.status === 401 && typeof window !== 'undefined') {
-      localStorage.removeItem('warops_token');
-      window.location.href = '/login';
-    }
-
-    if (
-      status === 403 &&
-      typeof window !== 'undefined' &&
-      typeof detail === 'string' &&
-      detail.toLowerCase().includes('disabled')
-    ) {
-      localStorage.removeItem('warops_token');
-      window.location.href = '/login';
-    }
-
-    return Promise.reject(err);
-  }
-);
-
-// Auth
-export const authAPI = {
-  register: (data: any) => api.post('/auth/register', data),
-  login: (data: any) => api.post('/auth/login', data),
-  loginWithGoogle: (data: { credential: string }) => api.post('/auth/google', data),
-  loginWithClerk: (data: { clerk_token: string; email?: string; full_name?: string }) => api.post('/auth/clerk', data),
-  forgotPassword: (data: { email: string }) => api.post('/auth/forgot-password', data),
-  resetPassword: (data: { token: string; new_password: string }) => api.post('/auth/reset-password', data),
-  me: () => api.get('/auth/me'),
-};
-
 // Dashboard
 export const dashboardAPI = {
   getStats: () => api.get('/dashboard'),

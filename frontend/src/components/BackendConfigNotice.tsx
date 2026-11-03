@@ -25,7 +25,7 @@ export function BackendConfigNotice() {
       }}
     >
       <strong>Demo mode:</strong> the backend API is not connected, so the app is showing
-      fictional sample data and sign-in is disabled. Set <code>NEXT_PUBLIC_API_URL</code> to your hosted backend&apos;s
+      fictional sample data. Set <code>NEXT_PUBLIC_API_URL</code> to your hosted backend&apos;s
       <code> /api/v1</code> URL to enable them.
     </div>
   );
