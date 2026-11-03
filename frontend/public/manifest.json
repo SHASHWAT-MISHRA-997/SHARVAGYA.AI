@@ -1,0 +1,23 @@
+{
+  "name": "SHARVAGYA.AI - Operational Intelligence & Risk Analytics",
+  "short_name": "SHARVAGYA.AI",
+  "description": "Enterprise platform for verified geopolitical intelligence, risk scoring, live alerts, and operator workflows.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0e17",
+  "theme_color": "#6366f1",
+  "orientation": "any",
+  "developer": {
+    "name": "SHASHWAT MISHRA",
+    "url": "https://www.linkedin.com/in/sm980/"
+  },
+  "publisher": "SHASHWAT MISHRA",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/google-symbol.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

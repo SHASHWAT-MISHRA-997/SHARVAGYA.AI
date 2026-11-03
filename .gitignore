@@ -1,0 +1,42 @@
+# Secrets and env
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+backend/.venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.pytest_cache/
+.mypy_cache/
+*.db
+*.sqlite
+*.sqlite3
+warops.db
+
+# Node / Next
+node_modules/
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+*.tsbuildinfo
+
+# Build / runtime
+*.log
+logs.txt
+backend_logs.txt
+frontend_logs_tail300.txt
+backend/celerybeat-schedule
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local temp and browser profiles
+tmp/
