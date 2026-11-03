@@ -1,18 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { authAPI } from '@/lib/api';
 import { motion } from 'framer-motion';
 import { Globe, LogIn } from 'lucide-react';
 import GoogleSignInButton from '@/components/GoogleSignInButton';
 import { getSupabaseClient, isSupabaseConfigured } from '@/lib/supabase';
+import { demoUser, isDemoMode } from '@/lib/demo-api';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [demo, setDemo] = useState(false);
+
+  useEffect(() => {
+    setDemo(isDemoMode());
+  }, []);
+
+  const enterDemo = () => {
+    localStorage.setItem('warops_token', demoUser.access_token);
+    localStorage.setItem('warops_user', JSON.stringify(demoUser));
+    window.location.href = '/dashboard';
+  };
 
   const signInWithGoogle = async (credential: string) => {
     setError('');
@@ -84,6 +96,17 @@ export default function LoginPage() {
         </div>
         <h1 className="brand-wordmark brand-wordmark-auth">ORVANTA</h1>
         <p>Sign in to your operations workspace</p>
+
+        {demo && (
+          <div style={{ marginBottom: 20 }}>
+            <button type="button" className="btn btn-primary btn-lg" style={{ width: '100%' }} onClick={enterDemo}>
+              Explore demo workspace
+            </button>
+            <p style={{ marginTop: 8, fontSize: 12 }}>
+              Sample data only. Sign-in is available once the backend is connected.
+            </p>
+          </div>
+        )}
 
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
           <GoogleSignInButton

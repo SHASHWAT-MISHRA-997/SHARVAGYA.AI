@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { demoAdapter, isDemoMode } from './demo-api';
 
 const DEFAULT_API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
 
@@ -32,6 +33,11 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
   timeout: 15000,
 });
+
+// No backend configured on a hosted deployment: answer requests with sample data.
+if (isDemoMode()) {
+  api.defaults.adapter = demoAdapter;
+}
 
 // JWT interceptor
 api.interceptors.request.use((config) => {

@@ -1,0 +1,6 @@
+# The Next.js app lives in /frontend — build from there so Netlify detects
+# the framework and serves the app instead of an empty repo root.
+[build]
+  base = "frontend"
+  command = "npm install --no-audit --no-fund && npm run build"
+  publish = ".next"
